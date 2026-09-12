@@ -15,8 +15,10 @@ class Engrenagens extends Phaser.Physics.Arcade.Sprite {
         const Engrenagem = this.scene.physics.add.sprite(x, y, Texture);
         
         Engrenagem.NumeroDentes = NumeroDentes;
-        Engrenagem.body.setSize(NumeroDentes * 8.5, NumeroDentes * 8.5);
-        Engrenagem.setDisplaySize(NumeroDentes * 8, NumeroDentes * 8);
+        //Engrenagem.body.setSize(NumeroDentes * 8.5, NumeroDentes * 8.5);
+        Engrenagem.body.setCircle(NumeroDentes * 4.5);
+        //Sim, tem que ser 4.5, senão ele não fica certo com o desenho
+        Engrenagem.setDisplaySize(NumeroDentes * 4, NumeroDentes * 4);
         //Engrenagem.setSize(NumeroDentes * 8, NumeroDentes * 8);
         Engrenagem.Velocidade = Velocidade;
         Engrenagem.id = this.engrenagens.length;
@@ -33,7 +35,6 @@ class Engrenagens extends Phaser.Physics.Arcade.Sprite {
 
     DefinirVelocidade(Engrenagem)
     {
-        console.log("testando");
 
         for(let i = 0; i < this.engrenagens.length; i++)
         {
@@ -43,9 +44,6 @@ class Engrenagens extends Phaser.Physics.Arcade.Sprite {
 
         if(this.scene.physics.overlap(Engrenagem, this.engrenagens[i]))
         {
-
-            console.log("encostando");
-
             if(Math.abs(Engrenagem.Velocidade) > Math.abs(this.engrenagens[i].Velocidade))
             {
                 this.engrenagens[i].Velocidade = 

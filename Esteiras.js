@@ -17,33 +17,39 @@ class Esteiras extends Phaser.Physics.Arcade.Sprite {
     Esteira.Comprimento = Comprimento;
     Esteira.Velocidade = Velocidade;
     Esteira.id = this.esteiras.length;
-
+    Esteira.angulo = angulo;
     Esteira.setRotation(angulo);
 
     if(angulo == Math.PI / 2)
     {
-        Esteira.body.setSize(21 * Comprimento, 44 / Comprimento);
+        Esteira.body.setSize(21.3 * Comprimento, 45 / Comprimento);
     }
+    Esteira.setDisplaySize(45, 30 * Comprimento);
 
-    Esteira.setDisplaySize(60, 40 * Comprimento);
-
-    // largura/altura do tile calculadas a partir do tamanho final da esteira,
-    // não do tamanho bruto da textura
     const largura = Esteira.displayWidth;
     const altura = Esteira.displayHeight;
 
     Esteira.Pedacos = this.scene.add.tileSprite(
         Esteira.x, Esteira.y, largura, altura, pedacosTextura
     );
-
     Esteira.Pedacos.setRotation(angulo);
+
+
 
     this.esteiras.push(Esteira);
 }
 
     RodarEsteiras()
     {
-        //for()
+        //console.log('chamou');
+        for(let i = 0; i < this.esteiras.length;i++)
+    {
+        const Esteira = this.esteiras[i];
+
+        Esteira.Pedacos.tilePositionY += Esteira.Velocidade;
+    
+
+    }
     }
 
 update(delta, time)
