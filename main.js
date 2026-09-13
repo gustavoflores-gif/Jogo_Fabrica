@@ -49,12 +49,21 @@ const config = {
     //this.fundo.setDisplaySize(this.scale.width,this.scale.height);
 
     Mouse = this.input.activePointer;
-        this.input.on('gameobjectdown', (pointer, gameObject) => {
-        if (pinosarray.includes(gameObject)) {
-            console.log('Pino clicado em: ', gameObject.x, gameObject.y);
+
+this.input.on('gameobjectdown', (pointer, gameObject) => {
+
+    switch (gameObject.Tipo) {
+        case 'pino':
             CriarObjeto(gameObject);
-        }
-    });
+            break;
+        case 'esteira':
+            SelecionarEsteira(gameObject);
+            break;
+        case 'engrenagem':
+            ConectarEngrenagem(gameObject);
+            break;
+    }
+});
 
     this.input.keyboard.on('keydown', (event) => {
 
@@ -83,27 +92,18 @@ const config = {
 
       pinosarray[qtPinos] = pinos.create(i * 45 + 22.5,j * 45 + 22.5,'Pino');
       pinosarray[qtPinos].setInteractive();
+      pinosarray[qtPinos].Tipo = 'pino';
       qtPinos += 1;
-
-      //console.log('Pinos: ' + qtPinos);
-
     }
     }
 
-    //engrenagensobj.CriarEngrenagem(337.25,202.5,8,'Engrenagem8',0,0);
-    engrenagensobj.CriarEngrenagem(382.5,202.5,16,'Engrenagem16',Math.PI/100,Math.PI / 5);
-    //engrenagensobj.CriarEngrenagem(517.5,202.5,64,'Engrenagem64',0,Math.PI / 5);
-    engrenagensobj.CriarEngrenagem(382.5,247.5,8,'Engrenagem8',0,Math.PI / 5);
-    engrenagensobj.CriarEngrenagem(472.5,202.5,32,'Engrenagem32',0,0);
-    engrenagensobj.CriarEngrenagem(562.5,202.5,16,'Engrenagem16',0,Math.PI / 5);
-    engrenagensobj.CriarEngrenagem(652.5,202.5,32,'Engrenagem32',0,0);
-    esteira.CriarEsteira(600, 300, 10, 'FundoEsteira',Math.PI / 10,Math.PI / 2, 'PedacoEsteira');
-    //Math.PI / 2
-
+    engrenagensobj.CriarEngrenagem(382.5,202.5,16,'Engrenagem16',Math.PI/1000,Math.PI / 5);
+    engrenagensobj.CriarEngrenagem(292.5,202.5,16,'Engrenagem16',-Math.PI/1000,0);
   }
 
 function CriarObjeto(gameObject)
   {
+
     switch (opcao)
     {
       case '1':
@@ -136,13 +136,13 @@ function CriarObjeto(gameObject)
         } else if (PrimeiroX == gameObject.x && PrimeiroY != gameObject.y)
         {
       esteira.CriarEsteira((PrimeiroX + gameObject.x)/2, (PrimeiroY + gameObject.y)/2, 
-      (Math.abs(PrimeiroY - gameObject.y)) / 45, 
-      'FundoEsteira',Math.PI / 10,0, 'PedacoEsteira');
+      (Math.abs(PrimeiroY - gameObject.y)) /45, 
+      'FundoEsteira',0,0, 'PedacoEsteira');
         } else if(PrimeiroX != gameObject.x && PrimeiroY == gameObject.y)
         {
       esteira.CriarEsteira((PrimeiroX + gameObject.x)/2, (PrimeiroY + gameObject.y)/2, 
       (Math.abs(PrimeiroX - gameObject.x))/45, 
-      'FundoEsteira',Math.PI / 10,Math.PI / 2, 'PedacoEsteira');
+      'FundoEsteira',0,Math.PI / 2, 'PedacoEsteira');
         }
 
       PodeMudarOpcao = true;

@@ -10,20 +10,28 @@ class Engrenagens extends Phaser.Physics.Arcade.Sprite {
                 this.engrenagens = [];
     }
 
-    CriarEngrenagem(x, y, NumeroDentes, Texture, Velocidade,angulo)
+    CriarEngrenagem(x, y, NumeroDentes, Texture, Velocidade,angulo, coneccao)
     {
         const Engrenagem = this.scene.physics.add.sprite(x, y, Texture);
         
         Engrenagem.NumeroDentes = NumeroDentes;
-        //Engrenagem.body.setSize(NumeroDentes * 8.5, NumeroDentes * 8.5);
         Engrenagem.body.setCircle(NumeroDentes * 4.5);
-        //Sim, tem que ser 4.5, senão ele não fica certo com o desenho
         Engrenagem.setDisplaySize(NumeroDentes * 4, NumeroDentes * 4);
-        //Engrenagem.setSize(NumeroDentes * 8, NumeroDentes * 8);
-        Engrenagem.Velocidade = Velocidade;
+
+        if(Velocidade != 0)
+        {
+            Engrenagem.VelocidadeOriginal = Velocidade;
+        }
+        else {
+            Engrenagem.VelocidadeOriginal = 0;
+        }
+
+        Engrenagem.Velocidade = Engrenagem.VelocidadeOriginal;
         Engrenagem.id = this.engrenagens.length;
         Engrenagem.setRotation(angulo);
-        
+        Engrenagem.coneccao = coneccao;
+        Engrenagem.Tipo = 'engrenagem';
+        Engrenagem.Travado =false;
         this.engrenagens.push(Engrenagem);    
     }
 
@@ -44,6 +52,28 @@ class Engrenagens extends Phaser.Physics.Arcade.Sprite {
 
         if(this.scene.physics.overlap(Engrenagem, this.engrenagens[i]))
         {
+            if(Engrenagem.VelocidadeOriginal != 0)
+            {
+                Engrenagem.Velocidade = Engrenagem.VelocidadeOriginal;
+            }
+
+            if(Engrenagem.Travado == true || this.engrenagens[i].Travado == true)
+            {
+                this.engrenagens[i].Travado = true;
+                Engrenagem.Travado = true;
+                this.engrenagens[i].Velocidade = 0;
+                Engrenagem.Velocidade = 0;
+            } else {
+
+                if((Engrenagem.Velocidade > 0 && this.engrenagens[i].Velocidade > 0 ) ||
+                (Engrenagem.Velocidade < 0 && this.engrenagens[i].Velocidade < 0 ))
+                {
+                    Engrenagem.Velocidade = 0;
+                    Engrenagem.Travado = true;
+                    this.engrenagens[i].Travado = true;
+                    this.engrenagens[i].Velocidade = 0;
+                } else {
+
             if(Math.abs(Engrenagem.Velocidade) > Math.abs(this.engrenagens[i].Velocidade))
             {
                 this.engrenagens[i].Velocidade = 
@@ -59,8 +89,21 @@ class Engrenagens extends Phaser.Physics.Arcade.Sprite {
             }
             }
             }
+            /*
+            if(Engrenagem.VelocidadeOriginal != 0)
+            {
+                Engrenagem.Velocidade = Engrenagem.VelocidadeOriginal;
+            }
+                */
+            }
+            }
         }
     }
+
+    EngrenagemEsteira()
+        {
+            
+        }
 
     update(delta, time){
     for(let i = 0; i < this.engrenagens.length; i++)
